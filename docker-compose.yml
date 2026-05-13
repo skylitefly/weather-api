@@ -1,0 +1,39 @@
+services:
+  weather-api:
+    image: ghcr.io/skylite-fs/skylite-weather-api
+    restart: always
+    ports:
+      - "8025:8000"
+    environment:
+      - SKYLITE_DJANGO_ALLOWED_HOSTS=weather.api.skylitefly.com,localhost,127.0.0.1
+      - SKYLITE_REDIS_WEATHER_LOCATION=redis://redis:6379/0
+      - SKYLITE_REDIS_WEATHER_PASSWORD=
+      - SKYLITE_REDIS_WEATHER_KEY_PREFIX=weather
+      - SKYLITE_AVWX_TOKEN=
+      - SKYLITE_AVWX_BASE_URL=https://avwx.rest/api
+    depends_on:
+      - redis
+
+  cron:
+    image: ghcr.io/skylite-fs/skylite-weather-api
+    restart: always
+    environment:
+      - SKYLITE_DJANGO_ALLOWED_HOSTS=weather.api.skylitefly.com,localhost,127.0.0.1
+      - SKYLITE_REDIS_WEATHER_LOCATION=redis://redis:6379/0
+      - SKYLITE_REDIS_WEATHER_PASSWORD=
+      - SKYLITE_REDIS_WEATHER_KEY_PREFIX=weather
+      - SKYLITE_AVWX_TOKEN=
+      - SKYLITE_AVWX_BASE_URL=https://avwx.rest/api
+    depends_on:
+      - redis
+    command: cron -f
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+
+volumes:
+  redis_data:
