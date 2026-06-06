@@ -1,6 +1,6 @@
 services:
   weather-api:
-    image: ghcr.io/skylite-fs/skylite-weather-api
+    image: crpi-a20te69e34l8yeun.ap-southeast-1.personal.cr.aliyuncs.com/skylite/skylite-weather-api
     restart: always
     ports:
       - "8025:8000"
@@ -15,7 +15,7 @@ services:
       - redis
 
   cron:
-    image: ghcr.io/skylite-fs/skylite-weather-api
+    image: crpi-a20te69e34l8yeun.ap-southeast-1.personal.cr.aliyuncs.com/skylite/skylite-weather-api
     restart: always
     environment:
       - SKYLITE_DJANGO_ALLOWED_HOSTS=weather.api.skylitefly.com,localhost,127.0.0.1

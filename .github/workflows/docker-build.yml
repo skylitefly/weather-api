@@ -25,7 +25,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/${{ github.repository_owner }}/skylite-weather-api
+          images: crpi-a20te69e34l8yeun.ap-southeast-1.personal.cr.aliyuncs.com/skylite/skylite-weather-api
           tags: |
             type=ref,event=branch
             type=ref,event=pr
@@ -42,13 +42,13 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Login to GitHub Container Registry
+      - name: Login to Aliyun Container Registry
         if: github.event_name != 'pull_request'
         uses: docker/login-action@v3
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: crpi-a20te69e34l8yeun.ap-southeast-1.personal.cr.aliyuncs.com
+          username: ${{ secrets.REGISTRY_USER }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
 
       - name: Build and push
         uses: docker/build-push-action@v6
