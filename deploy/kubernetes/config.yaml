@@ -4,6 +4,6 @@ metadata:
   name: skylite-weather-config
 data:
   SKYLITE_DJANGO_ALLOWED_HOSTS: "*"
-  SKYLITE_REDIS_WEATHER_LOCATION: "redis://111.229.211.136:6379/2"
+  SKYLITE_REDIS_WEATHER_LOCATION: "redis://115.159.210.95:6379/2"
   SKYLITE_REDIS_WEATHER_KEY_PREFIX: "weather"
   SKYLITE_AVWX_BASE_URL: "https://avwx.rest/api"
