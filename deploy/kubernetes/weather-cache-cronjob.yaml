@@ -1,0 +1,47 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: skylite-weather-cache-refresh
+  labels:
+    app.kubernetes.io/name: skylite-weather
+    app.kubernetes.io/component: scheduled-job
+spec:
+  schedule: "*/5 * * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      ttlSecondsAfterFinished: 600
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: skylite-weather
+            app.kubernetes.io/component: scheduled-job
+        spec:
+          restartPolicy: Never
+          imagePullSecrets:
+          - name: aliyun-registry-login-secret
+          containers:
+          - name: cache-refresh
+            image: crpi-a20te69e34l8yeun.ap-southeast-1.personal.cr.aliyuncs.com/skylite/skylite-weather-api:latest
+            imagePullPolicy: Always
+            args:
+            - python
+            - manage.py
+            - fetch_metar_taf_cache
+            envFrom:
+            - configMapRef:
+                name: skylite-weather-config
+            - secretRef:
+                name: skylite-weather-secrets
+            env:
+            - name: MALLOC_ARENA_MAX
+              value: "2"
+            resources:
+              requests:
+                cpu: 50m
+                memory: 96Mi
+              limits:
+                memory: 256Mi

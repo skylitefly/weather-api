@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: skylite-weather-api-ingress
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+  labels:
+    app.kubernetes.io/name: skylite-weather
+    app.kubernetes.io/component: api
+spec:
+  rules:
+  - host: weather.api.skylitefly.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: skylite-weather-api
+            port:
+              number: 80
